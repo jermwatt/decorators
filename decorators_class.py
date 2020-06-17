@@ -284,16 +284,17 @@ class myDecorators:
 
                 # sync functionality
                 def sync():
-                    # fire sync
-                    sync_command = 'aws s3 cp ' + self.file_location + self.file_name + ' ' + self.bucket_location + self.file_name
-
-                    # sync up
+                    # sync file
+                    sync_command = 'aws s3 cp ' + self.filepath + ' ' + self.bucket_filepath
                     os.system(sync_command)
                     
+                    # sync log
+                    sync_command = 'aws s3 cp ' + self.logpath + ' ' + self.bucket_logpath
+                    os.system(sync_command)                    
                     return 1
                     
                 ### wrap saver in logger - and execute ###
-                custom_message = '"sync" of data at ' + self.file_location + self.file_name
+                custom_message = '"sync" of data at ' + self.filepath + ' and log at ' + self.logpath
                 sync = self.log_it(file_location=self.file_location,custom_message=custom_message,reset_log=reset_log,log_name=self.log_name)(sync)
                 
                 # run sync
