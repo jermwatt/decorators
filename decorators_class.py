@@ -23,9 +23,10 @@ class myDecorators:
         self.file_location = os.getcwd() + '/'
         if 'file_location' in kwargs:
             self.file_location = kwargs['file_location']
-            
-        if self.file_location[-1] != '/':
-            self.file_location += '/'
+        
+        if len(self.file_location[-1]) > 0:
+            if self.file_location[-1] != '/':
+                self.file_location += '/'
             
         # set file name
         self.file_name = 'test_file.txt'
@@ -41,8 +42,9 @@ class myDecorators:
         self.bucket_location = ''
         if 'bucket_location' in kwargs:
             self.bucket_location = kwargs['bucket_location']
-            if self.bucket_location[-1] != '/':
-                self.bucket_location += '/'
+            if len(self.bucket_location) > 0:
+                if self.bucket_location[-1] != '/':
+                    self.bucket_location += '/'
                 
         self.reset_paths()
 
@@ -95,6 +97,12 @@ class myDecorators:
         return wrapper
 
 
+    def just_log(self,message):
+        # log start of execution
+        dateTimeObj = datetime.now().replace(microsecond=0)
+        print(dateTimeObj,message,file=open(self.logpath, "a"))
+        
+        
     def log_it(self,**log_info):
         '''
         convinent time-based logging execution of input function 'func'
@@ -105,8 +113,9 @@ class myDecorators:
                 ### reset paths if desired ###
                 if 'file_location' in log_info:
                     self.file_location = log_info['file_location']
-                    if self.file_location[-1] != '/':
-                        self.file_location += '/'
+                    if len(self.file_location) > 0:
+                        if self.file_location[-1] != '/':
+                            self.file_location += '/'
                         
                 if 'log_name' in log_info:
                     self.log_name = log_info['log_name']
@@ -163,8 +172,9 @@ class myDecorators:
                 ### reset paths if desired ###
                 if 'file_location' in save_info:
                     self.file_location = save_info['file_location']
-                    if self.file_location[-1] != '/':
-                        self.file_location += '/'
+                    if len(self.file_location) > 0:
+                        if self.file_location[-1] != '/':
+                            self.file_location += '/'
 
                 # define file_name
                 if 'file_name' in save_info:
@@ -202,23 +212,8 @@ class myDecorators:
                         
                 # otherwise - save result
                 def save_data(result):
-                    # check if result is iterable
-                    iterable_transform = 0
-                    if isinstance(result, Iterable) == False:
-                        # if result is not iterable, wrap in list 
-                        result = [result]
-                        iterable_transform = 1
-
-                    # save results line-by-line
-                    for item in result:
-                        # append to file
-                        with open(self.filepath, 'a') as the_file:
-                            the_file.write(str(item) + '\n')
-
-                    # if iterable return to base 
-                    if iterable_transform == 1:
-                        result = result[0]
-                        
+                    with open(self.filepath, 'a') as the_file:
+                        the_file.write(str(result) + '\n')
                     return 1
                         
                 # wrap saver in logger - then execute
@@ -253,8 +248,9 @@ class myDecorators:
                 ### reset paths if desired ###
                 if 'file_location' in sync_info:
                     self.file_location = sync_info['file_location']
-                    if self.file_location[-1] != '/':
-                        self.file_location += '/'
+                    if len(self.file_location) > 0:
+                        if self.file_location[-1] != '/':
+                            self.file_location += '/'
 
                 # define file_name
                 if 'file_name' in sync_info:
@@ -271,9 +267,10 @@ class myDecorators:
 
                 # define bucket location
                 if 'bucket_location' in sync_info:
-                    self.bucket_location = sync_info['bucket_location']     
-                    if self.bucket_location[-1] != '/':
-                        self.bucket_location += '/'
+                    self.bucket_location = sync_info['bucket_location']  
+                    if len(self.bucket_location) > 0:
+                        if self.bucket_location[-1] != '/':
+                            self.bucket_location += '/'
                         
                 # reset paths
                 self.reset_paths()
