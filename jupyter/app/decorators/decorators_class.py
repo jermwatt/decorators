@@ -225,9 +225,12 @@ class myDecorators:
                         result = pd.DataFrame(result)
 
                         # if no file yet exists save with headers, otherwise save without headers
-                        if os.path.exists(self.filepath):                                
-                            # create file with headers
-                            result.to_csv(self.filepath, mode='a', header=False,index=None)
+                        if os.path.exists(self.filepath):
+                            if os.stat(self.filepath).st_size == 0:
+                                # create file with headers
+                                result.to_csv(self.filepath, mode='a', header=True,index=None)
+                            else:
+                                result.to_csv(self.filepath, mode='a', header=False,index=None)
                         else:
                             result.to_csv(self.filepath, mode='a', header=True,index=None)
                         return 1
