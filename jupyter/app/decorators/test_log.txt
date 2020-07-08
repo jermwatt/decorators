@@ -1,0 +1,8 @@
+2020-07-08 17:30:01 START: function "some_dataprocessing_function" starting execution
+2020-07-08 17:30:01 SUCCESS: function "some_dataprocessing_function" executed properly
+2020-07-08 17:30:01 START: "save" of function "some_dataprocessing_function" starting execution
+2020-07-08 17:30:01 SUCCESS: "save" of function "some_dataprocessing_function" executed properly
+2020-07-08 17:30:03 START: function "some_dataprocessing_function" starting execution
+2020-07-08 17:30:03 SUCCESS: function "some_dataprocessing_function" executed properly
+2020-07-08 17:30:03 START: "save" of function "some_dataprocessing_function" starting execution
+2020-07-08 17:30:03 SUCCESS: "save" of function "some_dataprocessing_function" executed properly

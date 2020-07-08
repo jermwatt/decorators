@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  # define elastic app
+  app:
+   build:
+    context: jupyter
+   container_name: app 
+   volumes: 
+    - ./jupyter/app:/usr/src/app
+   working_dir: /usr/src/app
+   command: >
+      sh -c "jupyter notebook --port=8888 --ip=0.0.0.0 --allow-root --NotebookApp.token=''"
+   restart: always
+   ports:
+    - 8888:8888

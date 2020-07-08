@@ -6,6 +6,7 @@ from datetime import datetime
 from collections.abc import Iterable   
 import os
 import smtplib, ssl
+import pandas as pd
 
 
 class myDecorators:
@@ -209,13 +210,36 @@ class myDecorators:
                 if isinstance(result,str):
                     if result[:7] == 'FAILURE':   
                         return result
-                        
-                # otherwise - save result
-                def save_data(result):
-                    with open(self.filepath, 'a') as the_file:
-                        the_file.write(str(result) + '\n')
-                    return 1
-                        
+                
+                ### our basic save_data function ##
+                def save_data(result):        
+                    # standard python read/write save
+                    def standard_save(result):
+                        with open(self.filepath, 'a') as the_file:
+                            the_file.write(str(result) + '\n')
+                        return 1
+                    
+                    # pandas save --> for lists of dictionaries
+                    def pandas_save(result):
+                        # convert to pandas dataframe
+                        result = pd.DataFrame(result)
+
+                        # if no file yet exists save with headers, otherwise save without headers
+                        if os.path.exists(self.filepath):                                
+                            # create file with headers
+                            result.to_csv(self.filepath, mode='a', header=False,index=None)
+                        else:
+                            result.to_csv(self.filepath, mode='a', header=True,index=None)
+                        return 1
+                    
+                    ### if the input type is a list of dictionaries, then save using pandas for better formatting ###
+                    if isinstance(result,list):
+                        if len(result) > 0:
+                            if isinstance(result[0],dict): 
+                                ## we save lists of dictionaries using pandas append operations ##
+                                return pandas_save(result)
+                    return standard_save(result)                           
+
                 # wrap saver in logger - then execute
                 custom_message = '"save" of function "' + func.__name__ + '"'
                 save_data = self.log_it(file_location=self.file_location,custom_message=custom_message,reset_log=reset_log,log_name=self.log_name)(save_data)
